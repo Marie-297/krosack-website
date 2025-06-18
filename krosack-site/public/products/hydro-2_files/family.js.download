@@ -1,0 +1,14 @@
+/* 
+ * Cyberhull_Family
+ *
+ * @category    Family
+ * @package     Cyberhull_Family
+ * @author      anton.belyankin@cyberhull.com
+ */
+
+function sendQty(id, ref) {
+    var qty = document.getElementById(id).value;              
+    ref= ref + 'qty/' + qty;
+    document.location.href = ref;
+}
+

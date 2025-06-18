@@ -1,6 +1,9 @@
 import "./globals.css"
 import { Inter } from "next/font/google"
 import Navbar from "@/components/primary/Navbar"
+import "react-responsive-carousel/lib/styles/carousel.min.css";
+import Footer from "@/components/primary/Footer";
+import { AppContextProvider } from "../../context/AppContext";
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -13,8 +16,11 @@ export default function RootLayout({ children }: { children: React.ReactNode }) 
   return (
     <html lang="en">
       <body className={inter.className}>
-        <Navbar />
-        <main className="p-4">{children}</main>
+        <AppContextProvider>
+          <Navbar />
+          <main className="p-4">{children}</main>
+          <Footer />
+        </AppContextProvider>
       </body>
     </html>
   )

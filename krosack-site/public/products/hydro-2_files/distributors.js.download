@@ -1,0 +1,38 @@
+/**
+ * Cyberhull_Distributors
+ *
+ * @category    Cyberhull
+ * @package     Cyberhull_Distributors
+ * @author      dmitry.sazonov@cyberhull.com
+ */
+jQuery(document).ready(function()
+{
+    function refreshTable() {
+        jQuery("#after_zip_tr").hide();
+        jQuery("#zip_tr").hide();
+        jQuery("#after_specialization_tr").hide();
+        jQuery("#specialization_tr").hide();
+        jQuery("#after_region_tr").hide();
+        jQuery("#region_tr").hide();
+        if (jQuery("#country").val() == 'US') {
+            jQuery("#after_zip_tr").show();
+            jQuery("#zip_tr").show();
+            jQuery("#after_specialization_tr").show();
+            jQuery("#specialization_tr").show();
+            jQuery("#after_region_tr").show();
+            jQuery("#region_tr").show();
+        }
+        if (jQuery("#country").val() == 'CA') {
+            jQuery("#after_specialization_tr").show();
+            jQuery("#specialization_tr").show();
+            jQuery("#after_region_tr").show();
+            jQuery("#region_tr").show();
+            jQuery("#zip_tr").show();
+            jQuery("#after_zip_tr").show();
+        }
+    }
+    refreshTable();
+    jQuery("#country").change(function() {
+        refreshTable();
+    });
+});

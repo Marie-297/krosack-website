@@ -18,6 +18,7 @@ const Config: Config = {
       },
   		colors: {
 				darkBlue: "#00008B",
+				primaryBlue: '#3B82F6',
         skyBlue: "#87CEEB",
         lamaPurple: "#CFCEFF",
         lamaPurpleLight: "#F1F0FF",

@@ -3,6 +3,7 @@ import Link from "next/link"
 import Image from "next/image"
 import { useState } from "react"
 import { HiMenu, HiX } from "react-icons/hi"
+import { FaSearch } from "react-icons/fa"
 
 
 export default function Navbar() {
@@ -32,11 +33,20 @@ export default function Navbar() {
         </Link>
 
         <div className="hidden md:flex flex-1 justify-center mx-6">
-          <input
-            type="text"
-            placeholder="Search..."
-            className="w-full max-w-md border border-gray-300 rounded-full px-4 py-1 focus:outline-none focus:ring-2 focus:ring-blue-500"
-          />
+          <div className="relative w-full max-w-md">
+            <input
+              type="text"
+              placeholder="Search..."
+              className="w-full max-w-md border border-gray-300 rounded-full px-4 py-1 pr-10 focus:outline-none focus:ring-2 focus:ring-blue-500"
+            />
+            <button
+              type="button"
+              title="search"
+              className="absolute right-0 top-1/2 transform bg-gray-100 rounded-r-full -translate-y-1/2 text-gray-500 hover:text-blue-500 h-full w-12 border-l-2 border-gray-300 border flex items-center justify-center active:scale-95 transition-transform duration-100"
+            >
+              <FaSearch />
+            </button>
+          </div>
         </div>
 
         {!menuOpen && (
