@@ -57,8 +57,8 @@ const HeaderSlider = () => {
               <h1 className="max-w-lg md:text-[40px] md:leading-[48px] text-2xl font-semibold">
                 {slide.title}
               </h1>
-              <div className="flex items-center mt-4 md:mt-6">
-                <button className="md:px-10 px-7 md:py-2.5 py-2 bg-blue-500 rounded-lg text-white text-sm md:text-base font-bold">
+              <div className="flex items-center justify-between md:justify-normal mt-4 md:mt-6">
+                <button className="md:px-10 px-2 md:py-2.5 py-2 bg-blue-500 rounded-lg text-white text-sm md:text-base font-bold">
                   {slide.buttonText1}
                 </button>
                 <button className="flex items-center gap-2 px-4 py-2.5 font-semibold md:text-sm whitespace-nowrap">

@@ -11,8 +11,9 @@
 // import product_list_icon from "./product_list_icon.svg";
 // import menu_icon from "./menu_icon.svg";
 // import arrow_icon from "./arrow_icon.svg";
-// import increase_arrow from "./increase_arrow.svg";
-// import decrease_arrow from "./decrease_arrow.svg";
+import increaseArrow from "../increaseArrow.svg";
+import decreaseArrow from "../decreaseArrow.svg";
+import gobackArrow from "../go-back.svg";
 // import arrow_right_icon_colored from "./arrow_right_icon_colored.svg";
 // import my_location_image from "./my_location_image.svg";
 // import arrow_icon_white from "./arrow_icon_white.svg";
@@ -61,8 +62,9 @@ export const assets = {
   // product_list_icon,
   // menu_icon,
   // arrow_icon,
-  // increase_arrow,
-  // decrease_arrow,
+  increaseArrow,
+  decreaseArrow,
+  gobackArrow,
   // arrow_right_icon_colored,
   // my_location_image,
   // arrow_icon_white,
@@ -136,6 +138,7 @@ export const productsDummyData = [
     "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
     "name": "Digital Thermo - Hygrometer",
     "description": " The digital thermo-hygrometer is an ideal measuring instrument for monitoring the indoor climate. Room temperature and humidity can easily be kept in view and regulated with targeted heating and ventilation. This creates a comfortable and healthy living environment and even saves on heating costs. Daily highest and lowest values are permanently displayed and automatically reset at a specific time; Additional manual reset memory allows you to monitor peak values over a self-selected period of time.",
+    "highDemand" : true,
     "price": 0.00,
     "offerPrice": 0.00,
     "image": [
@@ -165,6 +168,7 @@ export const productsDummyData = [
     "brand" : "TFA",
     "function" : ["For the monitoring of temperature (precision ± 1°C) and humidity (precision ±3% from 35...75%)", "Indication of dew point, max.-min.-function with time and date of recording", "Alert when the temperature exceeds or falls below freely adjustable temperature and humidity values (upper/lower limit)", "Event alarm function", "Data logger with up to 50,000 measured values, recallable via display or PC USB Interface", "Free software with graph display available for download", "Extendable with up to 8 transmitters (30.3180.IT, 30.3181.IT)", "Switching Output", "Registered TFA design"],
     "color": "white-grey",
+    "highDemand" : false,
     "highlight" : ["For the professional monitoring of room climate", "Indoor temperature, humidity and dew point", "Max./min. values and alarm function", "Memory for up to 50,000 records", "USB transceiver and free software for PC"],
     "technical" : {"Measuring range temperature indoor	":"0...+50°C (+32...+122°F)","Delivery contents":"Base station, USB transceiver, PC software for download, batteries, instruction manual","Measuring range humidity":"1 ... 99% rH","Clock":"Radio-controlled clock","Time zone correction":"+12/-12h","Material":"Plastic","Maximum range":"100 m","Maximum amount of transmitters":"8","Transmitter optional":"30.3180.IT (Thermo-Hygro-Sender) und 30.3181.IT (Thermo-Sender), 30.3199.IT","Transmission frequency":"868 MHz","Power consumption":"Batteries","Assembling":"Wall mounting or freestanding","Batteries":"3 x AA 1.5 V (base station)","Dimensions":"(L) 98 x (B) 25 (77) x (H) 137 mm","Weight":"147 g",},
     "category": "Thermometer",
@@ -181,6 +185,7 @@ export const productsDummyData = [
     "image": [
       "/products/probe-1.jpg", "/products/probe-2.jpg"
     ],
+    "highDemand" : true,
     "brand" : "TFA",
     "function" : ["With long probe (NTC) (125 mm)", "For easy temperature measurements of liquid, powder-like and plastic products", "Accuracy ±0.8°C/1.8°F (from 0...+100°C/32…212°F, ±1°C/1.8°F from -20...0°C/-4...+32°F, otherwise ±1,5°C/2.7°F)", "IP65 jet water-proof", "Measures per second", "ON-/OFF Switch", "Hold-, max.-min.-function", "Compliant with EN13485", "In plastic case, with clip"],
     "color": "white",
@@ -196,6 +201,7 @@ export const productsDummyData = [
     "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
     "name": "Fridge / Freezer Thermometer",
     "description": "This thermometer measures both indoor and fridge or freezer temperatures simultaneously. It features a waterproof sensor with a wide range, max-min memory, and an alarm for extreme temperatures. Ideal for energy-saving and monitoring cold storage, it ensures accurate, reliable temperature control in various settings.",
+    "highDemand" : false,
     "price": 0.00,
     "offerPrice": 0.00,
     "brand" : "TFA",
@@ -218,6 +224,7 @@ export const productsDummyData = [
     "description": "The TFA infrared thermometer allows quick, non-contact surface temperature measurement using infrared technology and a built-in laser for precise targeting. Results appear within seconds on an illuminated display. It is versatile for both professional and home use—ideal for checking food, heating systems, and more. HACCP-compliant and hygienic, it is especially suited for the food industry.",
     "price": 0.00,
     "offerPrice": 0.00,
+    "highDemand" : true,
     "brand" : "TFA",
     "image": [
       "/products/infrared-1.jpg", "/products/infrared-2.jpg", "/products/infrared-3.jpg", "/products/infrared-4.jpg", "/products/infrared-5.jpg"
@@ -242,6 +249,7 @@ export const productsDummyData = [
     "image": [
       "/products/ph-1.jpg"
     ],
+    "highDemand" : false,
     "function" : ["For measuring pH and temperature", "Permanently fixed rod electrode made of plastic", "HOLD function", "IP65 splash-proof", "Calibration function", "Battery status display", "Automatic temperature compensation", "Incl. container with storage solution for electrode"],
     "color": "blue - white",
     "highlight" : ["For measuring pH and temperature", "HOLD function", "IP65 splashproof", "Including container with storage liquid for electrode", "Automatic temperature compensation and calibration function"],
@@ -259,6 +267,7 @@ export const productsDummyData = [
     "price": 0.00,
     "offerPrice": 0.00,
     "brand" : "",
+    "highDemand" : false,
     "image": [
       "/products/fridge-1.jpg", "/products/fridge-2.jpg", "/products/fridge-3.jpg", "/products/fridge-4.jpg"
     ],
@@ -281,6 +290,7 @@ export const productsDummyData = [
     "image": [
       "/products/salter-1.jpg", "/products/salter-2.jpg"
     ],
+    "highDemand" : false,
     "brand" : "Brecknell",
     "function" : ["For Weighing"],
     "color": "white",
@@ -301,6 +311,7 @@ export const productsDummyData = [
     "image": [
      "/products/thermo-1.webp", "/products/thermo-2.webp", "/products/thermo-3.webp", "/products/thermo-4.webp",
     ],
+    "highDemand" : false,
     "brand" : "",
     "function" : ["Super-Long Probe for Safety", "Lock Temperature Feature", "High Accuracy for Precise Cooking", "Backlit Display for Low-Light Settings", "Convenient Storage and Versatility"],
     "color": "white",
@@ -322,6 +333,7 @@ export const productsDummyData = [
       "/products/hydro-2.html"
     ],
     "brand" : "",
+    "highDemand" : false,
     "function" : ["Commonly used in industries such as food and beverage, chemical, pharmacology, transportation, refrigeration and more", "For liquids heavier than water"],
     "color": "white",
     "highlight" : ["Lead free ballast and glass", "Individually serialized", " Temperature standardization: 60°F (15°C)", "Packaged with a multi-language (English, French, German, Italian, Portuguese, and Spanish) Statement of Accuracy indicating accuracy traceable to NIST"],

@@ -21,6 +21,7 @@ interface Product {
   function?: string[]
   name: string
   color: string
+  highDemand: boolean
   technical: {
     [key: string]: string | undefined;
   }
@@ -99,6 +100,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
 
   const addToCart = async (itemId: string) => {
+    console.log("addToCart called for:", itemId);
     const cartData = structuredClone(cartItems)
     if (cartData[itemId]) {
       cartData[itemId] += 1

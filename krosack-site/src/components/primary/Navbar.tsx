@@ -4,10 +4,13 @@ import Image from "next/image"
 import { useState } from "react"
 import { HiMenu, HiX } from "react-icons/hi"
 import { FaSearch } from "react-icons/fa"
+import { FaCartShopping } from "react-icons/fa6";
+import { userContext } from "../../../context/AppContext"
 
 
 export default function Navbar() {
-   const [menuOpen, setMenuOpen] = useState(false)
+  const [menuOpen, setMenuOpen] = useState(false);
+  const { getCartCount } = userContext();
 
   const toggleMenu = () => setMenuOpen(!menuOpen)
   return (
@@ -62,6 +65,17 @@ export default function Navbar() {
           <li><Link href="/" className="hover:text-blue-600">Home</Link></li>
           <li><Link href="/products" className="hover:text-blue-600">Products</Link></li>
           <li><Link href="/contact" className="hover:text-blue-600">Contact</Link></li>
+          <li><Link href="/cart" className="hover:text-blue-600 flex gap-1 items-center">
+            Cart
+            <div className="relative">
+              <FaCartShopping className="text-xl" />
+              {getCartCount() > 0 && (
+                <span className="absolute -top-2 -right-2 bg-blue-500 text-white text-[10px] w-4 h-4 flex items-center justify-center rounded-full">
+                  {getCartCount()}
+                </span>
+              )}
+            </div>
+          </Link></li>
         </ul>
 
         {menuOpen && (

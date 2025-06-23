@@ -15,7 +15,7 @@ type Product = {
 
 const ItemCard = ({ product }: { product: Product }) => {
 
-    const { currency, router } = userContext()
+    const { router, addToCart } = userContext()
      if (!product) return null;
 
     return (
@@ -45,13 +45,13 @@ const ItemCard = ({ product }: { product: Product }) => {
 
             <div className="flex items-end justify-between w-full mt-1">
               <button
-                onClick={() => console.log("Add to Cart", product)}
-                className="max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-blue-600 hover:text-white transition"
+                onClick={() => { router.push('/products/' + product._id); scrollTo(0, 0) }}
+                className="max-sm:hidden px-4 py-1.5 text-gray-500 border border-gray-500/20 rounded-full text-xs hover:bg-blue-600 hover:text-white transition" type='button' title='view-product'
               >
                 View
               </button>
-              <button className="max-sm:hidden px-4 py-1.5 text-white border bg-black border-gray-500/20 rounded-lg text-xs hover:bg-transparent hover:text-gray-500 transition">
-                  Add to Cart
+              <button onClick={(e) => {addToCart(product._id); e.stopPropagation();}} className="max-sm:hidden px-4 py-1.5 text-white border bg-black border-gray-500/20 rounded-lg text-xs hover:bg-transparent hover:text-gray-500 transition" type='button' title='add-to-cart'>
+                Add to Cart
               </button>
             </div>
         </div>

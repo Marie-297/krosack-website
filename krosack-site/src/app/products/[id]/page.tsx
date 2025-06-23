@@ -77,17 +77,11 @@ const Product = () => {
               ))}
             </ul>
           </div>
-          {/* <p className="text-3xl font-medium mt-6">
-            {productData.currency}{productData.offerPrice}
-            <span className="text-base font-normal text-gray-800/60 line-through ml-2">
-              {productData.currency}{productData.price}
-            </span>
-          </p> */}
            <div className="flex items-center mt-10 gap-4">
-            <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-gray-100 text-blue-950 hover:bg-gray-200 transition">
+            <button onClick={() => {addToCart(productData._id); router.push("/cart");}} className="w-full py-3.5 bg-gray-100 text-blue-950 hover:bg-gray-200 transition">
               Request for price quote
             </button>
-            <button onClick={() => { addToCart(productData._id); router.push('/cart') }} className="w-full py-3.5 bg-black text-white hover:bg-black/50 transition">
+            <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-black text-white hover:bg-black/50 transition">
               Add to Cart
             </button>
           </div>
@@ -149,8 +143,8 @@ const Product = () => {
       </div>
       <div className="flex flex-col bg-gray-100 px-10 items-center">
         <div className="flex flex-col items-center mb-4 lg:mt-16 mt-8">
-            <p className="text-lg lg:text-3xl font-medium">Featured <span className="text-lg lg:font-medium text-blue-500">Products</span></p>
-            <div className="w-28 h-0.5 bg-blue-500 mt-2"></div>
+          <p className="text-lg lg:text-3xl font-medium">Featured <span className="text-lg lg:font-medium text-blue-500">Products</span></p>
+          <div className="w-28 h-0.5 bg-blue-500 mt-2"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 pb-14 w-full">
             {products.slice(0, 3).map((product) => <ItemCard key={product._id} product={product} />)}
