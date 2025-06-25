@@ -100,7 +100,6 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
 
   const addToCart = async (itemId: string) => {
-    console.log("addToCart called for:", itemId);
     const cartData = structuredClone(cartItems)
     if (cartData[itemId]) {
       cartData[itemId] += 1
@@ -136,12 +135,20 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }
 
   useEffect(() => {
-    fetchProductData()
-  }, [])
+    const storedCart = localStorage.getItem('cartItems');
+    if (storedCart) {
+      setCartItems(JSON.parse(storedCart));
+    }
+  }, []);
 
   useEffect(() => {
-    fetchUserData()
-  }, [])
+    localStorage.setItem('cartItems', JSON.stringify(cartItems));
+  }, [cartItems]);
+
+  useEffect(() => {
+    fetchProductData();
+    fetchUserData();
+  }, []);
 
   const value: AppContextType = {
     currency,

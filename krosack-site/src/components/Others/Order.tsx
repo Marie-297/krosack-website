@@ -2,12 +2,12 @@ import { addressDummyData } from "../../../public/assets/asset";
 import { userContext } from "../../../context/AppContext";
 import React, { useEffect, useState } from "react";
 import { Address } from "@/types/types";
-import { africanCountryCodes } from "@/data/countrycode";
 import WhatsAppInput from "./whatsapp";
+import html2pdf from "html2pdf.js";
 
 const Order = () => {
 
-  const { currency, router, getCartCount, getCartAmount } = userContext()
+  const { products, cartItems } = userContext()
   const [selectedAddress, setSelectedAddress] = useState<Address | null>(null);
   const [isDropdownOpen, setIsDropdownOpen] = useState(false);
 
@@ -36,11 +36,70 @@ const Order = () => {
     setIsDropdownOpen(false);
   };
 
-  const createOrder = async () => {
+  const generatePDF = () => {
+    setTimeout(() => {
+      const element = document.getElementById("quote-pdf");
+      if (!element) {
+        console.error("PDF element not found");
+        return;
+      }
 
-  }
+      html2pdf()
+        .set({
+          margin: 0.5,
+          filename: `Quote-${personalName || companyName || "Customer"}.pdf`,
+          html2canvas: { scale: 2 },
+          jsPDF: { unit: 'in', format: 'letter', orientation: 'portrait' },
+        })
+        .from(element)
+        // .save();
+    }, 100); 
+  };
 
-   const handleSubmit = () => {
+  const sendEmail = async (subject: string, body: string) => {
+    const element = document.getElementById("quote-pdf");
+    if (!element) return;
+
+    const opt = {
+      margin: 0.5,
+      filename: "Quote.pdf",
+      html2canvas: { scale: 2 },
+      jsPDF: { unit: "in", format: "letter", orientation: "portrait" },
+    };
+
+    const pdfBlob = await html2pdf().set(opt).from(element).outputPdf("blob");
+
+    const reader = new FileReader();
+    reader.readAsDataURL(pdfBlob);
+
+    reader.onloadend = async () => {
+      const pdfBase64 = reader.result;
+
+      const response = await fetch("/api/sendEmail", {
+        method: "POST",
+        headers: {
+          "Content-Type": "application/json",
+        },
+        body: JSON.stringify({
+          subject,
+          text: body,
+          pdfBase64,
+        }),
+      });
+
+      const data = await response.json();
+
+      if (response.ok) {
+        alert("Email sent successfully!");
+      } else {
+        console.error("Email error:", data.error);
+        alert("Failed to send email.");
+      }
+    };
+  };
+
+
+  const handleSubmit = async () => {
     setSubmitted(true);
     const allErrors = 
       (!usageType) ||
@@ -53,7 +112,7 @@ const Order = () => {
       if (allErrors) {
       setSubmitted(true);
       return;
-    }
+      }
 
     const summary = {
       usageType,
@@ -64,9 +123,24 @@ const Order = () => {
       whatsapp: quoteMethod === "whatsapp" ? whatsappNumber : undefined,
     };
 
-    console.log("Order Summary:", summary);
-    alert("Order submitted! Check console for summary.");
+    alert("Request Order sent! A PFI will be sent to you shortly.");
+    await generatePDF();
 
+    // ✅ Send to WhatsApp or Email after PDF is generated
+    if (quoteMethod === "whatsapp") {
+      await sendEmail(
+        "New Quote Request",
+        `Hi! This is a quote request from ${personalName || companyName}.`
+      );
+    }
+
+    if (quoteMethod === "email") {
+      await sendEmail(
+        "New Quote Request",
+        `Hi! This is a quote request from ${personalName || companyName}.`
+      );
+    }
+    // Reset form
     setUsageType(null);
     setQuoteMethod(null);
     setPersonalName("");
@@ -80,7 +154,7 @@ const Order = () => {
 
   useEffect(() => {
     fetchUserAddresses();
-  }, [])
+  }, []);
 
   return (
     <div className="w-full md:w-96 bg-gray-500/5 p-5">
@@ -208,6 +282,47 @@ const Order = () => {
       <button onClick={handleSubmit} className="w-full bg-blue-500 text-white py-3 mt-5 hover:bg-gray-300 hover:text-blue-950 rounded-lg cursor-pointer">
         Request
       </button>
+
+      <div id="quote-pdf" className="text-black bg-white p-4 border hidden">
+        <h2 className="text-lg font-bold mb-6 underline">Price Quote Request</h2>
+        {usageType === "personal" && (
+          <>
+            <p><strong>Name:</strong> {personalName}</p>
+            <p><strong>Location:</strong> {personalLocation}</p>
+          </>
+        )}
+        {usageType === "company" && (
+          <>
+            <p><strong>Company:</strong> {companyName}</p>
+            <p><strong >Address:</strong> {companyAddress}</p>
+          </>
+        )}
+        <p><strong>Contact Number:</strong> {quoteMethod}</p>
+        {quoteMethod === "email" && <p><strong>Email:</strong> {email}</p>}
+        {quoteMethod === "whatsapp" && <p><strong>WhatsApp:</strong> {whatsappNumber}</p>}
+
+        <h3 className="mt-4 font-bold mb-5">Cart Summary:</h3>
+        <table className="w-full py-2 border-collapse">
+          <thead>
+            <tr>
+              <th className="border px-2 py-1 text-left">Product</th>
+              <th className="border px-2 py-1 text-left">Quantity</th>
+            </tr>
+          </thead>
+          <tbody>
+            {Object.keys(cartItems).map(itemId => {
+              const product = products.find(p => p._id === itemId);
+              if (!product || cartItems[itemId] <= 0) return null;
+              return (
+                <tr key={itemId}>
+                  <td className="border px-2 py-1">{product.name}</td>
+                  <td className="border px-2 py-1">{cartItems[itemId]}</td>
+                </tr>
+              );
+            })}
+          </tbody>
+        </table>
+      </div>
     </div>
   );
 };

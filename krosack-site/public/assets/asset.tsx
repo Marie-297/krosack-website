@@ -325,18 +325,18 @@ export const productsDummyData = [
   {
     "_id": "67a1fa4b3f34a77b6dde9166",
     "userId": "user_2sZFHS1UIIysJyDVzCpQhUhTIhw",
-    "name": "Hydrometer (SP Bel-Art, H-B DURAC 1.000/2.000)",
-    "description": "These plain form hydrometers are available in a variety of models measuring specific gravity / relative density (g/cmᶟ) of liquids lighter and heavier than water in various ranges from 0.690 to 3.000.",
+    "name": "",
+    "description": "",
     "price": 0.00,
     "offerPrice": 0.00,
     "image": [
-      "/products/hydro-2.html"
+      
     ],
     "brand" : "",
     "highDemand" : false,
-    "function" : ["Commonly used in industries such as food and beverage, chemical, pharmacology, transportation, refrigeration and more", "For liquids heavier than water"],
+    "function" : [],
     "color": "white",
-    "highlight" : ["Lead free ballast and glass", "Individually serialized", " Temperature standardization: 60°F (15°C)", "Packaged with a multi-language (English, French, German, Italian, Portuguese, and Spanish) Statement of Accuracy indicating accuracy traceable to NIST"],
+    "highlight" : [],
     "technical" : {"": ""},
     "currency": "GH₵",
     "category": "Measuring Instrument",
