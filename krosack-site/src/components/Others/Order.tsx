@@ -3,7 +3,7 @@ import { userContext } from "../../../context/AppContext";
 import React, { useEffect, useState } from "react";
 import { Address } from "@/types/types";
 import WhatsAppInput from "./whatsapp";
-import html2pdf from "html2pdf.js";
+// import html2pdf from "html2pdf.js";
 
 const Order = () => {
 
@@ -36,7 +36,8 @@ const Order = () => {
     setIsDropdownOpen(false);
   };
 
-  const generatePDF = () => {
+  const generatePDF = async () => {
+    const html2pdf = (await import('html2pdf.js')).default;
     setTimeout(() => {
       const element = document.getElementById("quote-pdf");
       if (!element) {
@@ -57,6 +58,7 @@ const Order = () => {
   };
 
   const sendEmail = async (subject: string, body: string) => {
+    const html2pdf = (await import('html2pdf.js')).default;
     const element = document.getElementById("quote-pdf");
     if (!element) return;
 
