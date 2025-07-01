@@ -39,6 +39,7 @@ const Order = () => {
   };
 
   const generatePDF = async () => {
+    if (typeof window === "undefined") return;
     const html2pdf = (await import('html2pdf.js')).default;
     setTimeout(() => {
       const element = document.getElementById("quote-pdf");
