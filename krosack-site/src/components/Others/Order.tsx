@@ -288,7 +288,7 @@ const Order = () => {
         Request
       </button>
 
-      <div id="quote-pdf" className="text-black bg-white p-4 border">
+      <div id="quote-pdf" className="text-black bg-white p-4 border hidden">
         <h2 className="text-lg font-bold mb-6 underline">Price Quote Request</h2>
         {usageType === "personal" && (
           <>
