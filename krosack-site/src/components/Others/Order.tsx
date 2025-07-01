@@ -26,7 +26,7 @@ const Order = () => {
   const [email, setEmail] = useState("");
   const [whatsappNumber, setWhatsappNumber] = useState("");
   const [submitted, setSubmitted] = useState(false);
-
+  const [isGeneratingPDF, setIsGeneratingPDF] = useState(false);
 
 
   const fetchUserAddresses = async () => {
@@ -39,6 +39,7 @@ const Order = () => {
   };
 
   const generatePDF = async () => {
+    setIsGeneratingPDF(true);
     if (typeof window === "undefined") return;
     const html2pdf = (await import('html2pdf.js')).default;
     setTimeout(() => {
@@ -57,7 +58,10 @@ const Order = () => {
         })
         .from(element)
         // .save();
-    }, 100); 
+        .then(() => {
+          setIsGeneratingPDF(false);
+        });
+    }, 300); 
   };
 
   const sendEmail = async (subject: string, body: string) => {
@@ -288,46 +292,48 @@ const Order = () => {
         Request
       </button>
 
-      <div id="quote-pdf" className="text-black bg-white p-4 border hidden">
-        <h2 className="text-lg font-bold mb-6 underline">Price Quote Request</h2>
-        {usageType === "personal" && (
-          <>
-            <p><strong>Name:</strong> {personalName}</p>
-            <p><strong>Location:</strong> {personalLocation}</p>
-          </>
-        )}
-        {usageType === "company" && (
-          <>
-            <p><strong>Company:</strong> {companyName}</p>
-            <p><strong >Address:</strong> {companyAddress}</p>
-          </>
-        )}
-        <p><strong>Contact Number:</strong> {quoteMethod}</p>
-        {quoteMethod === "email" && <p><strong>Email:</strong> {email}</p>}
-        {quoteMethod === "whatsapp" && <p><strong>WhatsApp:</strong> {whatsappNumber}</p>}
+      {isGeneratingPDF && (
+        <div id="quote-pdf" className="text-black bg-white p-4 border">
+          <h2 className="text-lg font-bold mb-6 underline">Price Quote Request</h2>
+          {usageType === "personal" && (
+            <>
+              <p><strong>Name:</strong> {personalName}</p>
+              <p><strong>Location:</strong> {personalLocation}</p>
+            </>
+          )}
+          {usageType === "company" && (
+            <>
+              <p><strong>Company:</strong> {companyName}</p>
+              <p><strong >Address:</strong> {companyAddress}</p>
+            </>
+          )}
+          <p><strong>Contact Number:</strong> {quoteMethod}</p>
+          {quoteMethod === "email" && <p><strong>Email:</strong> {email}</p>}
+          {quoteMethod === "whatsapp" && <p><strong>WhatsApp:</strong> {whatsappNumber}</p>}
 
-        <h3 className="mt-4 font-bold mb-5">Cart Summary:</h3>
-        <table className="w-full py-2 border-collapse">
-          <thead>
-            <tr>
-              <th className="border px-2 py-1 text-left">Product</th>
-              <th className="border px-2 py-1 text-left">Quantity</th>
-            </tr>
-          </thead>
-          <tbody>
-            {Object.keys(cartItems).map(itemId => {
-              const product = products.find(p => p._id === itemId);
-              if (!product || cartItems[itemId] <= 0) return null;
-              return (
-                <tr key={itemId}>
-                  <td className="border px-2 py-1">{product.name}</td>
-                  <td className="border px-2 py-1">{cartItems[itemId]}</td>
-                </tr>
-              );
-            })}
-          </tbody>
-        </table>
-      </div>
+          <h3 className="mt-4 font-bold mb-5">Cart Summary:</h3>
+          <table className="w-full py-2 border-collapse">
+            <thead>
+              <tr>
+                <th className="border px-2 py-1 text-left">Product</th>
+                <th className="border px-2 py-1 text-left">Quantity</th>
+              </tr>
+            </thead>
+            <tbody>
+              {Object.keys(cartItems).map(itemId => {
+                const product = products.find(p => p._id === itemId);
+                if (!product || cartItems[itemId] <= 0) return null;
+                return (
+                  <tr key={itemId}>
+                    <td className="border px-2 py-1">{product.name}</td>
+                    <td className="border px-2 py-1">{cartItems[itemId]}</td>
+                  </tr>
+                );
+              })}
+            </tbody>
+          </table>
+        </div>
+      )}
     </div>
   );
 };
