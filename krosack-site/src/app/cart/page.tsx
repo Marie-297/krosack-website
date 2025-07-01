@@ -1,11 +1,13 @@
 'use client'
+export const dynamic = "force-dynamic";
 import React from "react";
 import { assets } from "../../../public/assets/asset";
 // import Order from "@/components/Others/Order";
-import dynamic from "next/dynamic";
-const Order = dynamic(() => import("@/components/Others/Order"), { ssr: false });
+import loadDynamic from "next/dynamic";
 import Image from "next/image";
 import { userContext } from "../../../context/AppContext";
+
+const Order = loadDynamic(() => import("@/components/Others/Order"), { ssr: false });
 
 const Cart = () => {
 
