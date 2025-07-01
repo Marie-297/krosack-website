@@ -1,3 +1,5 @@
+"use client"
+
 import { addressDummyData } from "../../../public/assets/asset";
 import { userContext } from "../../../context/AppContext";
 import React, { useEffect, useState } from "react";

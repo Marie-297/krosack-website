@@ -1,7 +1,9 @@
 'use client'
 import React from "react";
 import { assets } from "../../../public/assets/asset";
-import Order from "@/components/Others/Order";
+// import Order from "@/components/Others/Order";
+import dynamic from "next/dynamic";
+const Order = dynamic(() => import("@/components/Others/Order"), { ssr: false });
 import Image from "next/image";
 import { userContext } from "../../../context/AppContext";
 
