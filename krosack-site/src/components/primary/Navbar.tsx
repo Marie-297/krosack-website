@@ -6,11 +6,16 @@ import { HiMenu, HiX } from "react-icons/hi"
 import { FaSearch } from "react-icons/fa"
 import { FaCartShopping } from "react-icons/fa6";
 import { userContext } from "../../../context/AppContext"
+import { useUser, useClerk, UserButton } from "@clerk/nextjs"
+import { FaUserCircle } from "react-icons/fa";
+import { assets, BagIcon, CartIcon } from "../../../public/assets/asset"
 
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { getCartCount } = userContext();
+  const { getCartCount, isClient, router, user } = userContext();
+  // const {user, isSignedIn} = useUser()
+  const { openSignIn } = useClerk();
 
   const toggleMenu = () => setMenuOpen(!menuOpen)
   return (
@@ -62,6 +67,32 @@ export default function Navbar() {
 
 
         <ul className="hidden md:flex space-x-6">
+          <div className="flex items-center gap-3">
+            {user ? ( <button title="account" className="flex items-center gap-2 hover:text-gray-900 transition">
+              <div className="flex gap-2 justify-center items-center">
+                <UserButton appearance={{elements: { userButtonAvatarBox: "w-8 h-8",},}}
+                >
+                  <UserButton.MenuItems>
+                    <UserButton.Action label="My Cart" labelIcon={<CartIcon />} onClick={() => router.push('/cart')}/>
+                    <UserButton.Action label="My Request/Orders" labelIcon={<BagIcon />} onClick={() => router.push('/orders')}/>
+                  </UserButton.MenuItems>
+                </UserButton>
+                <div>
+                  <p className="text-xs">{user.firstName || user.fullName || "User"}</p>
+                  <p className="text-[8px] text-gray-400">CLIENT</p>
+                </div>
+              </div>
+            </button>
+             ) : (
+              <button
+                onClick={() => openSignIn?.()}
+                className="hover:text-blue-600 transition"
+                title="Sign in"
+              >
+                <FaUserCircle size={28} />
+              </button>
+            )}
+          </div>
           <li><Link href="/" className="hover:text-blue-600">Home</Link></li>
           <li><Link href="/products" className="hover:text-blue-600">Products</Link></li>
           <li><Link href="/contact" className="hover:text-blue-600">Contact</Link></li>
@@ -76,26 +107,62 @@ export default function Navbar() {
               )}
             </div>
           </Link></li>
+          <li>
+            {isClient && <button title="btn" onClick={() => router.push("/Client")}>Client Dashboard</button>}
+          </li>
         </ul>
 
         {menuOpen && (
-          <div className="absolute top-2 right-6 w-1/3 bg-white px-6 py-4 shadow-md z-50 md:hidden">
-            <div className="flex">
-              <button
-                onClick={toggleMenu}
-                aria-label="Close Menu"
-                className="absolute top-2 right-2"
-              >
-                <HiX size={28} />
-              </button>
+          <div className="absolute top-2 right-6 w-64 bg-white px-6 py-4 shadow-md z-50 md:hidden space-y-4 rounded-md overflow-visible">
+            <button
+              onClick={toggleMenu}
+              aria-label="Close Menu"
+              className="absolute top-2 right-2"
+            >
+              <HiX size={28} />
+            </button>
+
+            <div className="flex items-center gap-3 mt-6">
+              {user ? (
+                <div className="relative z-[60] flex gap-2">
+                  <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
+                  <div>
+                    <p className="text-sm font-medium">{user.firstName || user.fullName}</p>
+                    <p className="text-[10px] text-gray-400">CLIENT</p>
+                  </div>
+                </div>
+              ) : (
+                <button
+                  onClick={() => {
+                    toggleMenu();
+                    openSignIn?.();
+                  }}
+                  className="flex items-center gap-2 text-blue-600"
+                >
+                  <FaUserCircle size={20} /> Sign In
+                </button>
+              )}
             </div>
-            <ul className="flex flex-col space-y-2 mt-4 md:hidden">
-              <li><Link href="/" className="hover:text-blue-600" onClick={toggleMenu}>Home</Link></li>
-              <li><Link href="/products" className="hover:text-blue-600" onClick={toggleMenu}>Products</Link></li>
-              <li><Link href="/contact" className="hover:text-blue-600" onClick={toggleMenu}>Contact</Link></li>
+
+            <ul className="flex flex-col gap-3 text-sm mt-4">
+              <li><Link href="/" onClick={toggleMenu}>Home</Link></li>
+              <li><Link href="/products" onClick={toggleMenu}>Products</Link></li>
+              <li><Link href="/contact" onClick={toggleMenu}>Contact</Link></li>
+              {!user && ( <li><Link href="/cart" onClick={toggleMenu}>Cart</Link></li> )}
+              {user && (
+              <>
+                <li><Link href="/cart" onClick={toggleMenu}>My Cart</Link></li>
+                <li><Link href="/orders" onClick={toggleMenu}>My Orders</Link></li>
+                <li><button onClick={() => {
+                  toggleMenu();
+                  router.push("/Client");
+                }}>Client Dashboard</button></li>
+              </>
+            )}
             </ul>
           </div>
         )}
+
       </div>
     </nav>
   )

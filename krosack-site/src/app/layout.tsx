@@ -4,6 +4,14 @@ import Navbar from "@/components/primary/Navbar"
 import "react-responsive-carousel/lib/styles/carousel.min.css";
 import Footer from "@/components/primary/Footer";
 import { AppContextProvider } from "../../context/AppContext";
+import {
+  ClerkProvider,
+  SignInButton,
+  SignUpButton,
+  SignedIn,
+  SignedOut,
+  UserButton,
+} from '@clerk/nextjs'
 
 const inter = Inter({ subsets: ["latin"] })
 
@@ -14,14 +22,16 @@ export const metadata = {
 
 export default function RootLayout({ children }: { children: React.ReactNode }) {
   return (
-    <html lang="en">
-      <body className={inter.className}>
-        <AppContextProvider>
-          <Navbar />
-          <main className="p-4">{children}</main>
-          <Footer />
-        </AppContextProvider>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en">
+        <body className={inter.className}>
+          <AppContextProvider>
+            <Navbar />
+            <main className="p-4">{children}</main>
+            <Footer />
+          </AppContextProvider>
+        </body>
+      </html>
+    </ClerkProvider>  
   )
 }

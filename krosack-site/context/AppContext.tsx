@@ -9,6 +9,8 @@ import {
   useState,
   ReactNode,
 } from 'react'
+import { useUser } from "@clerk/nextjs"
+import type { UserResource } from "@clerk/types";
 
 // Define types for product and user (adjust according to actual structure)
 interface Product {
@@ -41,10 +43,11 @@ interface User {
 }
 
 interface AppContextType {
+  user?: UserResource | null
   currency: string | undefined
   router: ReturnType<typeof useRouter>
-  isSeller: boolean
-  setIsSeller: (value: boolean) => void
+  isClient: boolean
+  setIsClient: (value: boolean) => void
   userData: User | false
   fetchUserData: () => Promise<void>
   products: Product[]
@@ -76,10 +79,11 @@ interface AppContextProviderProps {
 export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   const currency = process.env.NEXT_PUBLIC_CURRENCY
   const router = useRouter()
+  const {user} = useUser();
 
   const [products, setProducts] = useState<Product[]>([])
   const [userData, setUserData] = useState<User | false>(false)
-  const [isSeller, setIsSeller] = useState<boolean>(true)
+  const [isClient, setIsClient] = useState<boolean>(true)
   const [cartItems, setCartItems] = useState<{ [itemId: string]: number }>({})
 
   const fetchProductData = async () => {
@@ -151,10 +155,11 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
   }, []);
 
   const value: AppContextType = {
+    user,
     currency,
     router,
-    isSeller,
-    setIsSeller,
+    isClient,
+    setIsClient,
     userData,
     fetchUserData,
     products,
