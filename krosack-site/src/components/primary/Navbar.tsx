@@ -9,12 +9,22 @@ import { userContext } from "../../../context/AppContext"
 import { useUser, useClerk, UserButton } from "@clerk/nextjs"
 import { FaUserCircle } from "react-icons/fa";
 import { assets, BagIcon, CartIcon } from "../../../public/assets/asset"
+import { FaLock } from "react-icons/fa";
+import { toast } from "sonner";
 
 
 export default function Navbar() {
   const [menuOpen, setMenuOpen] = useState(false);
-  const { getCartCount, isClient, router, user } = userContext();
-  // const {user, isSignedIn} = useUser()
+  const { getCartCount, isAdmin, router, user } = userContext();
+  const handleAdminLogin = () => {
+  const code = prompt("Enter admin code to access sign-in:");
+
+  if (code === process.env.NEXT_PUBLIC_ADMIN_SECRET_CODE) {
+    openSignIn?.();
+  } else {
+    toast.error("Incorrect code. Access denied.");
+  }
+};
   const { openSignIn } = useClerk();
 
   const toggleMenu = () => setMenuOpen(!menuOpen)
@@ -79,17 +89,17 @@ export default function Navbar() {
                 </UserButton>
                 <div>
                   <p className="text-xs">{user.firstName || user.fullName || "User"}</p>
-                  <p className="text-[8px] text-gray-400">CLIENT</p>
+                  <p className="text-[8px] text-gray-400">ADMIN</p>
                 </div>
               </div>
             </button>
              ) : (
               <button
-                onClick={() => openSignIn?.()}
+                onClick={handleAdminLogin}
                 className="hover:text-blue-600 transition"
-                title="Sign in"
+                title="Admin Login"
               >
-                <FaUserCircle size={28} />
+                <FaLock size={14} />
               </button>
             )}
           </div>
@@ -108,7 +118,7 @@ export default function Navbar() {
             </div>
           </Link></li>
           <li>
-            {isClient && <button title="btn" onClick={() => router.push("/Client")}>Client Dashboard</button>}
+            {user && <button title="btn" onClick={() => router.push("/admin")}>Dashboard</button>}
           </li>
         </ul>
 
@@ -128,18 +138,16 @@ export default function Navbar() {
                   <UserButton appearance={{ elements: { userButtonAvatarBox: "w-8 h-8" } }} />
                   <div>
                     <p className="text-sm font-medium">{user.firstName || user.fullName}</p>
-                    <p className="text-[10px] text-gray-400">CLIENT</p>
+                    <p className="text-[10px] text-gray-400">ADMIN</p>
                   </div>
                 </div>
               ) : (
                 <button
-                  onClick={() => {
-                    toggleMenu();
-                    openSignIn?.();
-                  }}
-                  className="flex items-center gap-2 text-blue-600"
+                  onClick={handleAdminLogin}
+                  className="flex items-center gap-2 text-blue-600 absolute top-2 left-2"
+                  title="Admin Login"
                 >
-                  <FaUserCircle size={20} /> Sign In
+                  <FaLock size={14} />
                 </button>
               )}
             </div>
@@ -156,7 +164,7 @@ export default function Navbar() {
                 <li><button onClick={() => {
                   toggleMenu();
                   router.push("/Client");
-                }}>Client Dashboard</button></li>
+                }}>Dashboard</button></li>
               </>
             )}
             </ul>

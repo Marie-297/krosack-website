@@ -46,8 +46,8 @@ interface AppContextType {
   user?: UserResource | null
   currency: string | undefined
   router: ReturnType<typeof useRouter>
-  isClient: boolean
-  setIsClient: (value: boolean) => void
+  isAdmin: boolean
+  setIsAdmin: (value: boolean) => void
   userData: User | false
   fetchUserData: () => Promise<void>
   products: Product[]
@@ -83,7 +83,7 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
 
   const [products, setProducts] = useState<Product[]>([])
   const [userData, setUserData] = useState<User | false>(false)
-  const [isClient, setIsClient] = useState<boolean>(true)
+  const [isAdmin, setIsAdmin] = useState<boolean>(true)
   const [cartItems, setCartItems] = useState<{ [itemId: string]: number }>({})
 
   const fetchProductData = async () => {
@@ -158,8 +158,8 @@ export const AppContextProvider = ({ children }: AppContextProviderProps) => {
     user,
     currency,
     router,
-    isClient,
-    setIsClient,
+    isAdmin,
+    setIsAdmin,
     userData,
     fetchUserData,
     products,

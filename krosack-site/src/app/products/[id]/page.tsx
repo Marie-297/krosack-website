@@ -16,17 +16,41 @@ const Product = () => {
   const { products, router, addToCart } = userContext()
 
   const [mainImage, setMainImage] = useState<string | null>(null);
-  const [productData, setProductData] = useState<any | null>(null);;
+  const [productData, setProductData] = useState<any | null>(null);
 
   useEffect(() => {
-  if (products.length > 0 && id) {
-    const product = products.find((product) => product._id === id);
-    if (product) {
-      setProductData(product);
-    }
-  }
+    if (!id) return;
+
+    const fetchProduct = async () => {
+      try {
+        const res = await fetch(`/api/product/${id}`);
+
+        // Check if response is JSON, fallback to dummy data if not
+        if (res.ok && res.headers.get("content-type")?.includes("application/json")) {
+          const data = await res.json();
+          setProductData(data.product || products.find(p => p.id === id) || null);
+        } else {
+          // Fallback to dummy/context data
+          const product = products.find(p => p.id === id);
+          setProductData(product || null);
+        }
+      } catch (err) {
+        console.error("Failed to fetch product:", err);
+        const product = products.find(p => p.id === id);
+        setProductData(product || null);
+      }
+    };
+
+    fetchProduct();
   }, [id, products]);
-  
+
+  if (!productData) return <Loading />;
+
+  const images: string[] = Array.isArray(productData?.imageUrl)
+    ? productData.imageUrl
+    : productData?.imageUrl
+      ? [productData.imageUrl]
+      : [];
 
   return productData ? (<>
     <div className="px-6 md:px-16 lg:px-32 pt-14 space-y-10">
@@ -34,7 +58,7 @@ const Product = () => {
         <div className="px-5 lg:px-16 xl:px-20">
           <div className="rounded-lg overflow-hidden bg-gray-500/10 mb-4">
             <Image
-                src={mainImage || productData.image[0]}
+                src={mainImage || images[0]}
                 alt="alt"
                 className="w-full h-auto object-cover mix-blend-multiply"
                 width={1280}
@@ -43,7 +67,7 @@ const Product = () => {
           </div>
 
           <div className="grid grid-cols-4 gap-4">
-            {productData.image.map((image:string, index: number) => (
+            {images.map((image:string, index: number) => (
               <div
                 key={index}
                 onClick={() => setMainImage(image)}
@@ -69,19 +93,23 @@ const Product = () => {
           <div>
             <h1 className="font-extrabold text-lg tracking-wider text-blue-950">Highlight:</h1>
             <ul className="text-gray-600 mt-3 list-disc list-inside space-y-1 ">
-              {productData.highlight.map((item: string, idx: number) => (
+              {Array.isArray(productData?.highlight) && productData.highlight.length > 0 ? (
+                productData.highlight.map((item: string, idx: number) => (
                 <li key={idx} className="flex items-start gap-2">
                 <FaCheck className="text-green-950 mt-1" />
                 <span>{item}</span>
               </li>
-              ))}
+              ))
+            ) : (
+              <li className="text-gray-400 italic">No highlights available</li>
+            )}
             </ul>
           </div>
            <div className="flex items-center mt-10 gap-4">
-            <button onClick={() => {addToCart(productData._id); router.push("/cart");}} className="w-full py-3.5 bg-gray-100 text-blue-950 hover:bg-gray-200 transition">
+            <button onClick={() => {addToCart(productData.id); router.push("/cart");}} className="w-full py-3.5 bg-gray-100 text-blue-950 hover:bg-gray-200 transition">
               Request for price quote
             </button>
-            <button onClick={() => addToCart(productData._id)} className="w-full py-3.5 bg-black text-white hover:bg-black/50 transition">
+            <button onClick={() => addToCart(productData.id)} className="w-full py-3.5 bg-black text-white hover:bg-black/50 transition">
               Add to Cart
             </button>
           </div>
@@ -100,7 +128,7 @@ const Product = () => {
                 <tr>
                   <td className="text-gray-600 font-medium">Category</td>
                   <td className="text-gray-800/50">
-                      {productData.category}
+                      {productData.category?.name}
                   </td>
                 </tr>
               </tbody>
@@ -122,21 +150,26 @@ const Product = () => {
         <div className="flex flex-col">
           <h1 className="font-extrabold text-lg tracking-wider text-blue-950">Function:</h1>
           <ul className="text-gray-600 mt-3 list-disc list-inside space-y-1 ">
-            {productData.function.map((item: string, idx: number) => (
-              <li key={idx}>{item}</li>
-            ))}
+            {Array.isArray(productData?.features) && productData.features.length > 0 ? (
+              productData.features.map((item: string, idx: number) => (
+                <li key={idx}>{item}</li>
+              ))
+            ) : (
+              <p className="text-gray-500">No functions available</p>
+            )}
           </ul>
         </div>
         <div className="flex flex-col">
           <h1 className="font-extrabold text-lg tracking-wider text-blue-950">Technical data:</h1>
           <table className="table-auto border border-gray-300 mt-6 w-full text-sm border-collapse">
             <tbody>
-              {Object.entries(productData.technical).map(([key, value], index) => (
+              {productData.technical && (
+                Object.entries(productData.technical).map(([key, value], index) => (
                 <tr key={index} className="border-t border-gray-300">
                   <td className="px-4 py-2 font-medium border-r border-gray-300 text-gray-700 w-1/3">{key}</td>
                   <td className="px-4 py-2 text-gray-600">{String(value)}</td>
                 </tr>
-              ))}
+              )))}
             </tbody>
           </table>
         </div>
@@ -147,7 +180,7 @@ const Product = () => {
           <div className="w-28 h-0.5 bg-blue-500 mt-2"></div>
         </div>
         <div className="grid grid-cols-1 md:grid-cols-2 lg:grid-cols-3 gap-4 mt-6 pb-14 w-full">
-            {products.slice(0, 3).map((product) => <ItemCard key={product._id} product={product} />)}
+            {products.slice(0, 3).map((product) => <ItemCard key={product.id} product={productData} />)}
         </div>
         <button className="px-8 py-2 mb-16 border rounded text-gray-500/70 hover:bg-slate-50/90 transition">
             See more

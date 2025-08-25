@@ -1,6 +1,6 @@
 
 export interface Address {
-  _id: string;
+  id: string;
   userId: string;
   fullName: string;
   phoneNumber: string;
@@ -11,7 +11,7 @@ export interface Address {
   __v: number;
 }
 export interface Product {
-  _id: string;
+  id: string;
   userId: string;
   name: string;
   description: string;
@@ -23,12 +23,12 @@ export interface Product {
   __v: number;
 }
 export interface OrderItem {
-  _id: string;
+  id: string;
   product: Product;
   quantity: number;
 }
 export interface Order {
-  _id: string;
+  id: string;
   userId: string;
   items: OrderItem[];
   address: Address;
